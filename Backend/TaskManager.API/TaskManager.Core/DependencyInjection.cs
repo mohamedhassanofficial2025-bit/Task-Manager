@@ -3,6 +3,10 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using FluentValidation;
+using TaskManager.Core.Features.Projects.ServicesContracts;
+using TaskManager.Core.Features.Tasks.ServicesContracts;
+using TaskManager.Core.Features.Projects.Services;
+using TaskManager.Core.Features.Tasks.Services;
 
 namespace TaskManager.Core;
 public static class DependencyInjection
@@ -15,6 +19,9 @@ public static class DependencyInjection
         // Register FluentValidation validators
         services.AddValidatorsFromAssembly(typeof(DependencyInjection).Assembly);
 
+        // Register the services
+        services.AddScoped<IProjectService, ProjectService>();
+        services.AddScoped<ITaskService, TaskService>();
         return services;
     }
 }

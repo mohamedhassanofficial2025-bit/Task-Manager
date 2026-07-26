@@ -62,8 +62,6 @@ public class TaskRepository : ITaskRepository
         existingTask.Title = taskItem.Title;
         existingTask.Description = taskItem.Description;
         existingTask.Status = taskItem.Status;
-        existingTask.DueDate = taskItem.DueDate;
-        existingTask.ProjectId = taskItem.ProjectId;
 
         await _context.SaveChangesAsync();
         return existingTask;
