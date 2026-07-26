@@ -1,0 +1,24 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="14.0.0" />
+    <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="12.1.1" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="10.0.10" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Common\Results\" />
+    <Folder Include="Features\Projects\ServicesContracts\" />
+    <Folder Include="Features\Projects\DTOs\" />
+    <Folder Include="Features\Projects\Validators\" />
+    <Folder Include="Features\Tasks\DTOs\" />
+    <Folder Include="Features\Tasks\Validators\" />
+  </ItemGroup>
+
+</Project>
