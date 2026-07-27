@@ -76,11 +76,14 @@
             </div>
           </td>
           <td>
-            <button class="badge" [ngClass]="getBadgeClass(task.status)"
-                    (click)="changeStatus(task.id, getNextStatus(task.status))"
-                    title="Click to advance status">
-              {{ getStatusLabel(task.status) }}
-            </button>
+            <select class="badge" [ngClass]="getBadgeClass(task.status)"
+                    [ngModel]="task.status"
+                    (ngModelChange)="changeStatus(task.id, $event)"
+                    title="Change status">
+              <option [ngValue]="taskStatus.ToDo">To Do</option>
+              <option [ngValue]="taskStatus.InProgress">In Progress</option>
+              <option [ngValue]="taskStatus.Done">Done</option>
+            </select>
           </td>
           <td>
             <span class="date-text" [class.overdue]="isOverdue(task)">

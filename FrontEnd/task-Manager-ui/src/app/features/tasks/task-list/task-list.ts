@@ -4,11 +4,12 @@ import { RouterLink } from '@angular/router';
 import { TaskService } from '../../../core/services/task';
 import { Task } from '../../../core/models/task';
 import { TaskStatus } from '../../../core/enums/task-status';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-task-list',
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, RouterLink, FormsModule],
   templateUrl: './task-list.html',
   styleUrl: './task-list.css',
 })
