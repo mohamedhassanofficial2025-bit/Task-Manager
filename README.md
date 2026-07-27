@@ -1,7 +1,24 @@
 # TaskFlow — Task Manager
 
+<p align="center">
+  <img src="Images/ProjectDetails.png" alt="TaskFlow Banner" width="900">
+</p>
+
+<p align="center">
+  <img src="https://img.shields.io/badge/.NET-10-purple" alt=".NET 10">
+  <img src="https://img.shields.io/badge/Angular-21-red" alt="Angular 21">
+  <img src="https://img.shields.io/badge/SQL%20Server-Database-blue" alt="SQL Server">
+  <img src="https://img.shields.io/badge/EF%20Core-Code%20First-green" alt="EF Core">
+  <img src="https://img.shields.io/badge/Assessment-ElectroPi-lightgrey" alt="ElectroPi Assessment">
+</p>
+
 TaskFlow is a full-stack task management application built as a technical assessment for **ElectroPi** using **ASP.NET Core 10**, **Angular 21**, and **SQL Server**. It provides a simple UI for managing projects and tasks with CRUD operations, status updates, and filtering.
 
+## 🎥 Demo
+
+A short demo of the application:
+
+**Google Drive:** <https://drive.google.com/file/d/1vYAKp-Z_r9NrNsjA6WebD17uBn6DWEbJ/view?usp=sharing>
 ## Features
 
 - Create, list, view, edit, and delete **projects**
@@ -15,6 +32,32 @@ TaskFlow is a full-stack task management application built as a technical assess
 - Seed data on first run
 - Interactive API docs with Scalar
 - Docker support for the backend
+
+## Screenshots
+
+### Projects List
+
+<p align="center">
+  <img src="Images/Projects.png" alt="Projects List" width="900">
+</p>
+
+### Project Details
+
+<p align="center">
+  <img src="Images/ProjectDetails.png" alt="Project Details" width="900">
+</p>
+
+### Task Form
+
+<p align="center">
+  <img src="Images/NewTask.png" alt="Task Form" width="900">
+</p>
+
+### Scalar API
+
+<p align="center">
+  <img src="Images/Scalar.png" alt="Scalar API" width="900">
+</p>
 
 ## Tech Stack
 
