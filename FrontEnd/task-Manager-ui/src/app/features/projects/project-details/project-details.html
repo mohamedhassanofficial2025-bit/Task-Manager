@@ -1,1 +1,105 @@
-<p>project-details works!</p>
+<div class="page-container" *ngIf="!isLoading && project">
+  <a routerLink="/projects" class="back-link">
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="m12 19-7-7 7-7"></path><path d="M19 12H5"></path>
+    </svg>
+    Back to Projects
+  </a>
+
+  <!-- Project Info Header -->
+  <div class="detail-header">
+    <div class="detail-info">
+      <h1 class="detail-title">{{ project.name }}</h1>
+      <p class="detail-desc">{{ project.description || 'No description provided' }}</p>
+    </div>
+    <a [routerLink]="['/projects', project.id, 'edit']" class="btn btn-secondary">
+      <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M17 3a2.85 2.85 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"></path>
+      </svg>
+      Edit Project
+    </a>
+  </div>
+
+  <!-- Stats Cards -->
+  <div class="stats-row">
+    <div class="stat-card">
+      <span class="stat-value">{{ tasks.length }}</span>
+      <span class="stat-label">Total Tasks</span>
+    </div>
+    <div class="stat-card stat-todo">
+      <span class="stat-value">{{ getCountByStatus(taskStatus.ToDo) }}</span>
+      <span class="stat-label">To Do</span>
+    </div>
+    <div class="stat-card stat-progress">
+      <span class="stat-value">{{ getCountByStatus(taskStatus.InProgress) }}</span>
+      <span class="stat-label">In Progress</span>
+    </div>
+    <div class="stat-card stat-done">
+      <span class="stat-value">{{ getCountByStatus(taskStatus.Done) }}</span>
+      <span class="stat-label">Done</span>
+    </div>
+  </div>
+
+  <!-- Tasks Section -->
+  <div class="section-header">
+    <h2 class="section-title">Project Tasks</h2>
+    <a routerLink="/tasks/create" class="btn btn-primary btn-sm">
+      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 5v14"></path><path d="M5 12h14"></path>
+      </svg>
+      Add Task
+    </a>
+  </div>
+
+  <!-- Empty tasks -->
+  <div class="empty-tasks" *ngIf="tasks.length === 0">
+    <p>No tasks in this project yet. Create one to get started!</p>
+  </div>
+
+  <!-- Task Cards -->
+  <div class="task-cards" *ngIf="tasks.length > 0">
+    <div class="task-card" *ngFor="let task of tasks; let i = index"
+         [style.animation-delay]="i * 40 + 'ms'">
+      <div class="task-card-left">
+        <button class="status-dot" [ngClass]="getBadgeClass(task.status)"
+                (click)="changeStatus(task.id, getNextStatus(task.status))"
+                [title]="'Click to change to ' + getStatusLabel(getNextStatus(task.status))">
+        </button>
+        <div class="task-card-info">
+          <span class="task-card-title" [class.task-done]="task.status === taskStatus.Done">
+            {{ task.title }}
+          </span>
+          <span class="task-card-meta" *ngIf="task.description">{{ task.description }}</span>
+        </div>
+      </div>
+      <div class="task-card-right">
+        <span class="badge" [ngClass]="getBadgeClass(task.status)">{{ getStatusLabel(task.status) }}</span>
+        <span class="task-date" *ngIf="task.dueDate">{{ formatDate(task.dueDate) }}</span>
+        <div class="task-card-actions">
+          <a [routerLink]="['/tasks', task.id, 'edit']" class="action-btn" title="Edit">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M17 3a2.85 2.85 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"></path>
+            </svg>
+          </a>
+          <button class="action-btn action-btn-danger" (click)="deleteTask(task.id)" title="Delete">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M3 6h18"></path>
+              <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path>
+              <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Loading -->
+<div class="state-container" *ngIf="isLoading">
+  <div class="loader">
+    <div class="loader-dot"></div>
+    <div class="loader-dot"></div>
+    <div class="loader-dot"></div>
+  </div>
+  <p class="state-text">Loading project details...</p>
+</div>

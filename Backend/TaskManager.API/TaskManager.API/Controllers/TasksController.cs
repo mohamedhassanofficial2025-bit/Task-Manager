@@ -26,8 +26,7 @@ public class TasksController : ControllerBase
     {
         var result = await _taskService.GetAllAsync();
         if (!result.IsSuccess)
-            return BadRequest(result);
-        
+            return Ok(result);
         return Ok(result);
     }
 
@@ -41,8 +40,7 @@ public class TasksController : ControllerBase
     {
         var result = await _taskService.GetByIdAsync(id);
         if (!result.IsSuccess)
-            return NotFound(result);
-
+            return Ok(result);
         return Ok(result);
     }
 
@@ -56,8 +54,7 @@ public class TasksController : ControllerBase
     {
         var result = await _taskService.GetAllByProjectIdAsync(id);
         if (!result.IsSuccess)
-            return NotFound(result);
-
+            return Ok(result);
         return Ok(result);
     }
 
@@ -71,8 +68,7 @@ public class TasksController : ControllerBase
     {
         var result = await _taskService.GetByStatusAsync(status);
         if (!result.IsSuccess)
-            return NotFound(result);
-
+            return Ok(result);
         return Ok(result);
     }
 

@@ -39,7 +39,7 @@ public class ProjectsController : ControllerBase
     {
         var result = await _projectService.GetByIdAsync(id);
         if (!result.IsSuccess)
-            return NotFound(result);
+            return Ok(result);
 
         return Ok(result);
     }

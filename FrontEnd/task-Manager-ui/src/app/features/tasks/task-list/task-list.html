@@ -1,1 +1,118 @@
-<p>task-list works!</p>
+<div class="page-container">
+  <!-- Header -->
+  <div class="page-header">
+    <div>
+      <h1 class="page-title">Tasks</h1>
+      <p class="page-subtitle">Track progress across all your projects.</p>
+    </div>
+    <a routerLink="/tasks/create" class="btn btn-primary">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 5v14"></path><path d="M5 12h14"></path>
+      </svg>
+      New Task
+    </a>
+  </div>
+
+  <!-- Filter Tabs -->
+  <div class="filter-bar" *ngIf="!isLoading && tasks.length > 0">
+    <button *ngFor="let filter of filters"
+            class="filter-tab"
+            [class.active]="activeFilter === filter"
+            (click)="applyFilter(filter)">
+      {{ getFilterLabel(filter) }}
+      <span class="filter-count">{{ getFilterCount(filter) }}</span>
+    </button>
+  </div>
+
+  <!-- Loading State -->
+  <div class="state-container" *ngIf="isLoading">
+    <div class="loader">
+      <div class="loader-dot"></div>
+      <div class="loader-dot"></div>
+      <div class="loader-dot"></div>
+    </div>
+    <p class="state-text">Loading tasks...</p>
+  </div>
+
+  <!-- Empty State -->
+  <div class="state-container" *ngIf="!isLoading && tasks.length === 0">
+    <div class="empty-illustration">
+      <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="3" y="5" width="6" height="6" rx="1"></rect>
+        <path d="m3 17 2 2 4-4"></path>
+        <path d="M13 6h8"></path><path d="M13 12h8"></path><path d="M13 18h8"></path>
+      </svg>
+    </div>
+    <h3 class="state-title">No tasks yet</h3>
+    <p class="state-text">Create your first task and start tracking your progress.</p>
+    <a routerLink="/tasks/create" class="btn btn-primary" style="margin-top: 1rem;">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 5v14"></path><path d="M5 12h14"></path>
+      </svg>
+      Create Task
+    </a>
+  </div>
+
+  <!-- Task Table -->
+  <div class="table-card" *ngIf="!isLoading && filteredTasks.length > 0">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th class="th-title">Title</th>
+          <th>Status</th>
+          <th>Due Date</th>
+          <th>Project ID</th>
+          <th class="th-actions">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let task of filteredTasks; let i = index"
+            class="table-row"
+            [style.animation-delay]="i * 30 + 'ms'">
+          <td>
+            <div class="task-info">
+              <span class="task-title">{{ task.title }}</span>
+              <span class="task-desc" *ngIf="task.description">{{ task.description }}</span>
+            </div>
+          </td>
+          <td>
+            <button class="badge" [ngClass]="getBadgeClass(task.status)"
+                    (click)="changeStatus(task.id, getNextStatus(task.status))"
+                    title="Click to advance status">
+              {{ getStatusLabel(task.status) }}
+            </button>
+          </td>
+          <td>
+            <span class="date-text" [class.overdue]="isOverdue(task)">
+              {{ formatDate(task.dueDate) }}
+            </span>
+          </td>
+          <td>
+            <a [routerLink]="['/projects', task.projectId]" class="project-link">#{{ task.projectId }}</a>
+          </td>
+          <td class="th-actions">
+            <div class="row-actions">
+              <a [routerLink]="['/tasks', task.id, 'edit']" class="action-btn" title="Edit">
+                <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M17 3a2.85 2.85 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"></path>
+                </svg>
+              </a>
+              <button class="action-btn action-btn-danger" (click)="deleteTask(task.id)" title="Delete">
+                <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M3 6h18"></path>
+                  <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path>
+                  <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path>
+                </svg>
+              </button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Filtered empty -->
+  <div class="state-container" *ngIf="!isLoading && tasks.length > 0 && filteredTasks.length === 0">
+    <p class="state-text">No tasks match the "{{ getFilterLabel(activeFilter) }}" filter.</p>
+  </div>
+</div>

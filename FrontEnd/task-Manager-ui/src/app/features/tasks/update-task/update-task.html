@@ -1,1 +1,89 @@
-<p>update-task works!</p>
+<div class="page-container">
+  <a routerLink="/tasks" class="back-link">
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="m12 19-7-7 7-7"></path><path d="M19 12H5"></path>
+    </svg>
+    Back to Tasks
+  </a>
+
+  <div class="form-card" *ngIf="!isLoading">
+    <div class="form-header">
+      <h1 class="form-title">Edit Task</h1>
+      <p class="form-subtitle">Update the task details below.</p>
+    </div>
+
+    <form (ngSubmit)="onSubmit()" #taskForm="ngForm" class="form-body">
+      <div class="form-group">
+        <label for="title" class="form-label">Task Title <span class="required">*</span></label>
+        <input id="title" type="text" class="form-input" placeholder="Enter task title"
+               [(ngModel)]="title" name="title" #titleField="ngModel"
+               required minlength="1" maxlength="150" autocomplete="off" />
+        <span class="char-count"
+              [class.near-limit]="title.length >= 120"
+              [class.at-limit]="title.length >= 150">
+          {{ title.length }} / 150
+        </span>
+        <span class="form-error" *ngIf="titleField.invalid && (titleField.touched || formSubmitted)">
+          <span *ngIf="titleField.errors?.['required']">Task title is required.</span>
+        </span>
+      </div>
+
+      <div class="form-group">
+        <label for="description" class="form-label">Description</label>
+        <textarea id="description" class="form-input form-textarea" placeholder="Describe the task..."
+                  [(ngModel)]="description" name="description" #descField="ngModel"
+                  rows="3" maxlength="500"></textarea>
+        <span class="char-count"
+              [class.near-limit]="description.length >= 400"
+              [class.at-limit]="description.length >= 500">
+          {{ description.length }} / 500
+        </span>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="project" class="form-label">Project</label>
+          <select id="project" class="form-input" [(ngModel)]="projectId" name="projectId" disabled>
+            <option [ngValue]="null" disabled>Select a project</option>
+            <option *ngFor="let p of projects" [ngValue]="p.id">{{ p.name }}</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="status" class="form-label">Status</label>
+          <select id="status" class="form-input" [(ngModel)]="status" name="status">
+            <option *ngFor="let s of taskStatuses" [ngValue]="s">{{ getStatusLabel(s) }}</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="dueDate" class="form-label">Due Date</label>
+        <input id="dueDate" type="date" class="form-input"
+               [(ngModel)]="dueDate" name="dueDate" [min]="minDate"
+               [class.ng-invalid]="isDueDateInvalid()"
+               [class.ng-touched]="formSubmitted" />
+        <span class="form-error" *ngIf="isDueDateInvalid() && formSubmitted">
+          Due date cannot be in the past.
+        </span>
+      </div>
+
+      <div class="form-actions">
+        <a routerLink="/tasks" class="btn btn-secondary">Cancel</a>
+        <button type="submit" class="btn btn-primary" [disabled]="isSubmitting">
+          <span *ngIf="!isSubmitting">Save Changes</span>
+          <span *ngIf="isSubmitting">Saving...</span>
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <div class="state-container" *ngIf="isLoading">
+    <div class="loader">
+      <div class="loader-dot"></div>
+      <div class="loader-dot"></div>
+      <div class="loader-dot"></div>
+    </div>
+    <p class="state-text">Loading task...</p>
+  </div>
+</div>

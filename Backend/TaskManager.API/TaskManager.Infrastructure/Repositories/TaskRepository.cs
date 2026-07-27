@@ -41,7 +41,6 @@ public class TaskRepository : ITaskRepository
     public async Task<TaskItem?> GetByIdAsync(int id)
     {
         return await _context.TaskItems
-            .AsNoTracking()
             .FirstOrDefaultAsync(t => t.Id == id);
     }
 
@@ -61,7 +60,7 @@ public class TaskRepository : ITaskRepository
 
         existingTask.Title = taskItem.Title;
         existingTask.Description = taskItem.Description;
-        existingTask.Status = taskItem.Status;
+        existingTask.DueDate = taskItem.DueDate;
 
         await _context.SaveChangesAsync();
         return existingTask;

@@ -1,1 +1,61 @@
-<p>update-project works!</p>
+<div class="page-container">
+  <a routerLink="/projects" class="back-link">
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="m12 19-7-7 7-7"></path><path d="M19 12H5"></path>
+    </svg>
+    Back to Projects
+  </a>
+
+  <div class="form-card" *ngIf="!isLoading">
+    <div class="form-header">
+      <h1 class="form-title">Edit Project</h1>
+      <p class="form-subtitle">Update the project details below.</p>
+    </div>
+
+    <form (ngSubmit)="onSubmit()" #projectForm="ngForm" class="form-body">
+      <div class="form-group">
+        <label for="name" class="form-label">Project Name <span class="required">*</span></label>
+        <input id="name" type="text" class="form-input" placeholder="Enter project name"
+               [(ngModel)]="name" name="name" #nameField="ngModel"
+               required minlength="1" maxlength="100" autocomplete="off" />
+        <span class="char-count"
+              [class.near-limit]="name.length >= 80"
+              [class.at-limit]="name.length >= 100">
+          {{ name.length }} / 100
+        </span>
+        <span class="form-error" *ngIf="nameField.invalid && (nameField.touched || formSubmitted)">
+          <span *ngIf="nameField.errors?.['required']">Project name is required.</span>
+        </span>
+      </div>
+
+      <div class="form-group">
+        <label for="description" class="form-label">Description</label>
+        <textarea id="description" class="form-input form-textarea" placeholder="What is this project about?"
+                  [(ngModel)]="description" name="description" #descField="ngModel"
+                  rows="4" maxlength="500"></textarea>
+        <span class="char-count"
+              [class.near-limit]="description.length >= 400"
+              [class.at-limit]="description.length >= 500">
+          {{ description.length }} / 500
+        </span>
+      </div>
+
+      <div class="form-actions">
+        <a routerLink="/projects" class="btn btn-secondary">Cancel</a>
+        <button type="submit" class="btn btn-primary" [disabled]="isSubmitting || projectForm.invalid">
+          <span *ngIf="!isSubmitting">Save Changes</span>
+          <span *ngIf="isSubmitting">Saving...</span>
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <div class="state-container" *ngIf="isLoading">
+    <div class="loader">
+      <div class="loader-dot"></div>
+      <div class="loader-dot"></div>
+      <div class="loader-dot"></div>
+    </div>
+    <p class="state-text">Loading project...</p>
+  </div>
+</div>

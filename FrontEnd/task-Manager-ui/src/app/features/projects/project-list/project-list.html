@@ -1,1 +1,89 @@
-<p>project-list works!</p>
+<div class="page-container">
+  <!-- Header -->
+  <div class="page-header">
+    <div>
+      <h1 class="page-title">Projects</h1>
+      <p class="page-subtitle">Manage and organize all your projects in one place.</p>
+    </div>
+    <a routerLink="/projects/create" class="btn btn-primary">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 5v14"></path><path d="M5 12h14"></path>
+      </svg>
+      New Project
+    </a>
+  </div>
+
+  <!-- Loading State -->
+  <div class="state-container" *ngIf="isLoading">
+    <div class="loader">
+      <div class="loader-dot"></div>
+      <div class="loader-dot"></div>
+      <div class="loader-dot"></div>
+    </div>
+    <p class="state-text">Loading projects...</p>
+  </div>
+
+  <!-- Empty State -->
+  <div class="state-container" *ngIf="!isLoading && projects.length === 0">
+    <div class="empty-illustration">
+      <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M20 17a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3.9a2 2 0 0 1-1.69-.9l-.81-1.2a2 2 0 0 0-1.67-.9H8a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2Z"></path>
+        <path d="M2 8v11a2 2 0 0 0 2 2h14"></path>
+      </svg>
+    </div>
+    <h3 class="state-title">No projects yet</h3>
+    <p class="state-text">Create your first project to get started organizing your work.</p>
+    <a routerLink="/projects/create" class="btn btn-primary" style="margin-top: 1rem;">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 5v14"></path><path d="M5 12h14"></path>
+      </svg>
+      Create Project
+    </a>
+  </div>
+
+  <!-- Project Cards Grid -->
+  <div class="projects-grid" *ngIf="!isLoading && projects.length > 0">
+    <div class="project-card" *ngFor="let project of projects; let i = index"
+         [style.animation-delay]="i * 50 + 'ms'">
+      <div class="card-header">
+        <div class="card-icon" [style.background]="'hsl(' + (i * 72 + 220) + ', 70%, 95%)'">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+               [style.stroke]="'hsl(' + (i * 72 + 220) + ', 60%, 50%)'"
+               stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20 17a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3.9a2 2 0 0 1-1.69-.9l-.81-1.2a2 2 0 0 0-1.67-.9H8a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2Z"></path>
+            <path d="M2 8v11a2 2 0 0 0 2 2h14"></path>
+          </svg>
+        </div>
+        <div class="card-actions">
+          <a [routerLink]="['/projects', project.id, 'edit']" class="action-btn" title="Edit">
+            <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M17 3a2.85 2.85 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"></path>
+            </svg>
+          </a>
+          <button class="action-btn action-btn-danger" (click)="deleteProject(project.id)" title="Delete">
+            <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M3 6h18"></path>
+              <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path>
+              <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <a [routerLink]="['/projects', project.id]" class="card-body">
+        <h3 class="card-title">{{ project.name }}</h3>
+        <p class="card-description">{{ project.description || 'No description provided' }}</p>
+      </a>
+
+      <div class="card-footer">
+        <div class="card-meta">
+          <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"></circle>
+            <polyline points="12 6 12 12 16 14"></polyline>
+          </svg>
+          <span>{{ getTimeAgo(project.createdAt) }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
