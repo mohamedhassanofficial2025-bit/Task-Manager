@@ -15,12 +15,14 @@ public class ProjectMappingProfile : Profile
         CreateMap<CreateProjectDto, Project>()
             .ForMember(dest => dest.Id, opt => opt.Ignore())
             .ForMember(dest => dest.CreatedAt, opt => opt.Ignore())
+            .ForMember(dest => dest.UserId, opt => opt.Ignore())
             .ForMember(dest => dest.Tasks, opt => opt.Ignore());
 
         // Update DTO -> Entity
         CreateMap<UpdateProjectDto, Project>()
             .ForMember(dest => dest.Id, opt => opt.Ignore())
             .ForMember(dest => dest.CreatedAt, opt => opt.Ignore())
+            .ForMember(dest => dest.UserId, opt => opt.Ignore())
             .ForMember(dest => dest.Tasks, opt => opt.Ignore());
     }
 }

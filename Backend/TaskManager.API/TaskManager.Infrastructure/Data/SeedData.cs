@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.DependencyInjection;
 using TaskManager.Core.Entities;
 using TaskManager.Core.Enums;
 
@@ -8,17 +10,76 @@ namespace TaskManager.Infrastructure.Data;
 
 public static class SeedData
 {
-    public static async Task SeedAsync(AddDbContext context)
+    public static async Task SeedAsync(IServiceProvider serviceProvider)
     {
+        var context = serviceProvider.GetRequiredService<AddDbContext>();
+        var roleManager = serviceProvider.GetRequiredService<RoleManager<AppRole>>();
+        var userManager = serviceProvider.GetRequiredService<UserManager<AppUser>>();
+
+        // --- Seed Roles ---
+        string[] roleNames = { "Admin", "User" };
+        foreach (var roleName in roleNames)
+        {
+            if (!await roleManager.RoleExistsAsync(roleName))
+            {
+                await roleManager.CreateAsync(new AppRole
+                {
+                    Name = roleName,
+                    Description = roleName == "Admin"
+                        ? "Administrator with user-management permissions"
+                        : "Standard user with project and task management permissions"
+                });
+            }
+        }
+
+        // --- Seed Admin User ---
+        const string adminEmail = "admin@taskflow.com";
+        if (await userManager.FindByEmailAsync(adminEmail) == null)
+        {
+            var adminUser = new AppUser
+            {
+                UserName = adminEmail,
+                Email = adminEmail,
+                FirstName = "Admin",
+                LastName = "TaskFlow",
+                EmailConfirmed = true
+            };
+            var result = await userManager.CreateAsync(adminUser, "Admin@123");
+            if (result.Succeeded)
+            {
+                await userManager.AddToRoleAsync(adminUser, "Admin");
+            }
+        }
+
+        // --- Seed Demo User + Projects + Tasks ---
         if (!context.Projects.Any())
         {
+            const string demoEmail = "demo@taskflow.com";
+            var demoUser = await userManager.FindByEmailAsync(demoEmail);
+            if (demoUser == null)
+            {
+                demoUser = new AppUser
+                {
+                    UserName = demoEmail,
+                    Email = demoEmail,
+                    FirstName = "Demo",
+                    LastName = "User",
+                    EmailConfirmed = true
+                };
+                var result = await userManager.CreateAsync(demoUser, "Demo@123");
+                if (result.Succeeded)
+                {
+                    await userManager.AddToRoleAsync(demoUser, "User");
+                }
+            }
+
             var projects = new List<Project>
             {
-                new Project { Name = "E-Commerce Website", Description = "Build a full-stack online store.", CreatedAt = DateTime.UtcNow },
-                new Project { Name = "HR Management System", Description = "Internal tool for HR department.", CreatedAt = DateTime.UtcNow },
-                new Project { Name = "Mobile App Refactoring", Description = "Refactor the existing iOS app to React Native.", CreatedAt = DateTime.UtcNow },
-                new Project { Name = "Data Migration", Description = "Migrate legacy data to the new cloud database.", CreatedAt = DateTime.UtcNow },
-                new Project { Name = "Marketing Campaign Q3", Description = "Assets and tracking for Q3 marketing.", CreatedAt = DateTime.UtcNow }
+                new Project { Name = "E-Commerce Website", Description = "Build a full-stack online store.", CreatedAt = DateTime.UtcNow, UserId = demoUser!.Id },
+                new Project { Name = "HR Management System", Description = "Internal tool for HR department.", CreatedAt = DateTime.UtcNow, UserId = demoUser.Id },
+                new Project { Name = "Mobile App Refactoring", Description = "Refactor the existing iOS app to React Native.", CreatedAt = DateTime.UtcNow, UserId = demoUser.Id },
+                new Project { Name = "Data Migration", Description = "Migrate legacy data to the new cloud database.", CreatedAt = DateTime.UtcNow, UserId = demoUser.Id },
+                new Project { Name = "Marketing Campaign Q3", Description = "Assets and tracking for Q3 marketing.", CreatedAt = DateTime.UtcNow, UserId = demoUser.Id }
             };
 
             await context.Projects.AddRangeAsync(projects);

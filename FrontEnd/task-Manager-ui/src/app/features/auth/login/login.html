@@ -1,0 +1,97 @@
+<div class="auth-page">
+  <div class="auth-container">
+    <!-- Left: Branding Panel -->
+    <div class="auth-branding">
+      <div class="branding-content">
+        <div class="branding-logo">
+          <div class="branding-logo-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="3" width="7" height="7" rx="1"></rect>
+              <rect x="14" y="3" width="7" height="7" rx="1"></rect>
+              <rect x="3" y="14" width="7" height="7" rx="1"></rect>
+              <rect x="14" y="14" width="7" height="7" rx="1"></rect>
+            </svg>
+          </div>
+          <span class="branding-logo-text">TaskFlow</span>
+        </div>
+        <h1 class="branding-title">Manage your projects with clarity.</h1>
+        <p class="branding-subtitle">A personal task management system built for developers who ship.</p>
+
+        <div class="branding-features">
+          <div class="branding-feature">
+            <div class="feature-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="m3 17 2 2 4-4"></path><path d="m3 7 2 2 4-4"></path><path d="M13 6h8"></path><path d="M13 12h8"></path><path d="M13 18h8"></path>
+              </svg>
+            </div>
+            <span>Track tasks across projects</span>
+          </div>
+          <div class="branding-feature">
+            <div class="feature-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"></path>
+              </svg>
+            </div>
+            <span>Secure & private by default</span>
+          </div>
+          <div class="branding-feature">
+            <div class="feature-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"></path>
+              </svg>
+            </div>
+            <span>Built for speed & simplicity</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right: Login Form -->
+    <div class="auth-form-panel">
+      <div class="auth-form-container">
+        <div class="auth-form-header">
+          <h2 class="auth-form-title">Welcome back</h2>
+          <p class="auth-form-subtitle">Sign in to your account to continue</p>
+        </div>
+
+        <div class="auth-error" *ngIf="errorMessage">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"></circle><path d="m15 9-6 6"></path><path d="m9 9 6 6"></path>
+          </svg>
+          <span>{{ errorMessage }}</span>
+        </div>
+
+        <form (ngSubmit)="onSubmit()" class="auth-form">
+          <div class="form-group">
+            <label for="email" class="form-label">Email</label>
+            <input id="email" type="email" class="form-input" placeholder="you@example.com"
+                   [(ngModel)]="email" name="email" required autocomplete="email"
+                   [class.input-error]="formSubmitted && emailError" />
+            <span class="form-error" *ngIf="formSubmitted && emailError">{{ emailError }}</span>
+          </div>
+
+          <div class="form-group">
+            <label for="password" class="form-label">Password</label>
+            <input id="password" type="password" class="form-input" placeholder="••••••••"
+                   [(ngModel)]="password" name="password" required autocomplete="current-password"
+                   [class.input-error]="formSubmitted && passwordError" />
+            <span class="form-error" *ngIf="formSubmitted && passwordError">{{ passwordError }}</span>
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-full" [disabled]="isSubmitting">
+            <span *ngIf="!isSubmitting">Sign In</span>
+            <span *ngIf="isSubmitting" class="btn-loading">
+              <span class="spinner"></span>
+              Signing in...
+            </span>
+          </button>
+        </form>
+
+        <div class="auth-footer">
+          <span>Don't have an account?</span>
+          <a routerLink="/register" class="auth-link">Create account</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

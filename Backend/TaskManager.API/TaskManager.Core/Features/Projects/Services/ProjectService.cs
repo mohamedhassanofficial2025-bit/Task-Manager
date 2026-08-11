@@ -27,24 +27,24 @@ public class ProjectService : IProjectService
 
     /*---------------------------------------------------------------*/
     /*---------------------------------------------------------------*/
-    public async Task<Result<IEnumerable<ProjectResponseDto>>> GetAllAsync()
+    public async Task<Result<IEnumerable<ProjectResponseDto>>> GetAllAsync(string userId)
     {
-        var result = await _repository.GetAllAsync();
+        var result = await _repository.GetAllAsync(userId);
         if (result == null || !result.Any())
             return Result<IEnumerable<ProjectResponseDto>>.Failure("No projects found.");
         return Result<IEnumerable<ProjectResponseDto>>.Success(_mapper.Map<IEnumerable<ProjectResponseDto>>(result));
     }
     /*---------------------------------------------------------------*/
 
-    public async Task<Result<ProjectResponseDto>> GetByIdAsync(int id)
+    public async Task<Result<ProjectResponseDto>> GetByIdAsync(int id, string userId)
     {
-        var result = await _repository.GetByIdAsync(id);
+        var result = await _repository.GetByIdAsync(id, userId);
         if (result == null)
             return Result<ProjectResponseDto>.Failure("Project not found.");
         return Result<ProjectResponseDto>.Success(_mapper.Map<ProjectResponseDto>(result));
     }
     /*---------------------------------------------------------------*/
-    public async Task<Result<ProjectResponseDto>> CreateAsync(CreateProjectDto dto)
+    public async Task<Result<ProjectResponseDto>> CreateAsync(CreateProjectDto dto, string userId)
     {
         var validationResult = await _createValidator.ValidateAsync(dto);
         if (!validationResult.IsValid)
@@ -54,13 +54,14 @@ public class ProjectService : IProjectService
         }
 
         var project = _mapper.Map<Project>(dto);
+        project.UserId = userId;
         var createdProject = await _repository.CreateAsync(project);
         
         return Result<ProjectResponseDto>.Success(_mapper.Map<ProjectResponseDto>(createdProject), "Project created successfully.");
     }
     /*---------------------------------------------------------------*/
 
-    public async Task<Result<ProjectResponseDto>> UpdateAsync(int id, UpdateProjectDto dto)
+    public async Task<Result<ProjectResponseDto>> UpdateAsync(int id, UpdateProjectDto dto, string userId)
     {
         var validationResult = await _updateValidator.ValidateAsync(dto);
         if (!validationResult.IsValid)
@@ -70,7 +71,7 @@ public class ProjectService : IProjectService
         }
 
         var projectToUpdate = _mapper.Map<Project>(dto);
-        var updatedProject = await _repository.UpdateAsync(id, projectToUpdate);
+        var updatedProject = await _repository.UpdateAsync(id, projectToUpdate, userId);
         
         if (updatedProject == null)
             return Result<ProjectResponseDto>.Failure("Project not found.");
@@ -78,9 +79,9 @@ public class ProjectService : IProjectService
         return Result<ProjectResponseDto>.Success(_mapper.Map<ProjectResponseDto>(updatedProject), "Project updated successfully.");
     }
     /*---------------------------------------------------------------*/
-    public async Task<Result> DeleteAsync(int id)
+    public async Task<Result> DeleteAsync(int id, string userId)
     {
-        var result = await _repository.DeleteAsync(id);
+        var result = await _repository.DeleteAsync(id, userId);
         if (!result)
             return Result.Failure("Project not found or could not be deleted.");
         return Result.Success("Project deleted successfully.");

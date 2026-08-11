@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -10,6 +10,10 @@ public class Project
     public string Name { get; set; } = string.Empty;
     public string? Description { get; set; }
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+
+    // Ownership — FK to AspNetUsers
+    public string UserId { get; set; } = string.Empty;
+
     // Navigation Property (One Project -> Many Tasks)
     public ICollection<TaskItem> Tasks { get; set; } = new HashSet<TaskItem>();
 }

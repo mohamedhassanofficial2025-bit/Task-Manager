@@ -1,9 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System;
 using System.Collections.Generic;
 using System.Text;
 using TaskManager.Core.Entities;
+using TaskManager.Infrastructure.Data;
 
 namespace TaskManager.Infrastructure.Configurations;
 
@@ -22,6 +23,15 @@ public class ProjectConfiguration : IEntityTypeConfiguration<Project>
 
         builder.Property(x => x.CreatedAt)
                .IsRequired();
+
+        builder.Property(x => x.UserId)
+               .IsRequired();
+
+        // Ownership relationship: Project belongs to a User
+        builder.HasOne<AppUser>()
+               .WithMany(u => u.Projects)
+               .HasForeignKey(x => x.UserId)
+               .OnDelete(DeleteBehavior.Cascade);
 
         builder.HasMany(x => x.Tasks)
                .WithOne(x => x.Project)

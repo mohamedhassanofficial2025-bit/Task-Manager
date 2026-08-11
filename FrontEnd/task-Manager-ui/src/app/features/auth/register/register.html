@@ -1,0 +1,123 @@
+<div class="auth-page">
+  <div class="auth-container">
+    <!-- Left: Branding Panel -->
+    <div class="auth-branding">
+      <div class="branding-content">
+        <div class="branding-logo">
+          <div class="branding-logo-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="3" width="7" height="7" rx="1"></rect>
+              <rect x="14" y="3" width="7" height="7" rx="1"></rect>
+              <rect x="3" y="14" width="7" height="7" rx="1"></rect>
+              <rect x="14" y="14" width="7" height="7" rx="1"></rect>
+            </svg>
+          </div>
+          <span class="branding-logo-text">TaskFlow</span>
+        </div>
+        <h1 class="branding-title">Start organizing your work today.</h1>
+        <p class="branding-subtitle">Create a free account and take control of your projects and tasks.</p>
+
+        <div class="branding-features">
+          <div class="branding-feature">
+            <div class="feature-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M22 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+              </svg>
+            </div>
+            <span>Personal workspace for your tasks</span>
+          </div>
+          <div class="branding-feature">
+            <div class="feature-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M20 17a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3.9a2 2 0 0 1-1.69-.9l-.81-1.2a2 2 0 0 0-1.67-.9H8a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2Z"></path>
+                <path d="M2 8v11a2 2 0 0 0 2 2h14"></path>
+              </svg>
+            </div>
+            <span>Organize with projects & folders</span>
+          </div>
+          <div class="branding-feature">
+            <div class="feature-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline>
+              </svg>
+            </div>
+            <span>Track due dates & progress</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right: Register Form -->
+    <div class="auth-form-panel">
+      <div class="auth-form-container">
+        <div class="auth-form-header">
+          <h2 class="auth-form-title">Create account</h2>
+          <p class="auth-form-subtitle">Fill in your details to get started</p>
+        </div>
+
+        <div class="auth-error" *ngIf="errorMessage">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"></circle><path d="m15 9-6 6"></path><path d="m9 9 6 6"></path>
+          </svg>
+          <span>{{ errorMessage }}</span>
+        </div>
+
+        <form (ngSubmit)="onSubmit()" class="auth-form">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="firstName" class="form-label">First Name</label>
+              <input id="firstName" type="text" class="form-input" placeholder="John"
+                     [(ngModel)]="firstName" name="firstName" required autocomplete="given-name"
+                     [class.input-error]="formSubmitted && firstNameError" />
+              <span class="form-error" *ngIf="formSubmitted && firstNameError">{{ firstNameError }}</span>
+            </div>
+            <div class="form-group">
+              <label for="lastName" class="form-label">Last Name</label>
+              <input id="lastName" type="text" class="form-input" placeholder="Doe"
+                     [(ngModel)]="lastName" name="lastName" required autocomplete="family-name"
+                     [class.input-error]="formSubmitted && lastNameError" />
+              <span class="form-error" *ngIf="formSubmitted && lastNameError">{{ lastNameError }}</span>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="email" class="form-label">Email</label>
+            <input id="email" type="email" class="form-input" placeholder="you@example.com"
+                   [(ngModel)]="email" name="email" required autocomplete="email"
+                   [class.input-error]="formSubmitted && emailError" />
+            <span class="form-error" *ngIf="formSubmitted && emailError">{{ emailError }}</span>
+          </div>
+
+          <div class="form-group">
+            <label for="password" class="form-label">Password</label>
+            <input id="password" type="password" class="form-input" placeholder="Min. 6 characters"
+                   [(ngModel)]="password" name="password" required minlength="6" autocomplete="new-password"
+                   [class.input-error]="formSubmitted && passwordError" />
+            <div class="password-strength" *ngIf="password.length > 0">
+              <div class="strength-bar">
+                <div class="strength-fill" [ngClass]="passwordStrength.class"
+                     [style.width.%]="passwordStrength.percent"></div>
+              </div>
+              <span class="strength-label" [ngClass]="passwordStrength.class">{{ passwordStrength.label }}</span>
+            </div>
+            <span class="form-error" *ngIf="formSubmitted && passwordError">{{ passwordError }}</span>
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-full"
+                  [disabled]="isSubmitting">
+            <span *ngIf="!isSubmitting">Create Account</span>
+            <span *ngIf="isSubmitting" class="btn-loading">
+              <span class="spinner"></span>
+              Creating...
+            </span>
+          </button>
+        </form>
+
+        <div class="auth-footer">
+          <span>Already have an account?</span>
+          <a routerLink="/login" class="auth-link">Sign in</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -6,12 +6,12 @@ namespace TaskManager.Core.Features.Tasks.ServicesContracts;
 
 public interface ITaskService
 {
-    Task<Result<IEnumerable<TaskResponseDto>>> GetAllAsync();
-    Task<Result<IEnumerable<TaskResponseDto>>> GetAllByProjectIdAsync(int projectId);
-    Task<Result<IEnumerable<TaskResponseDto>>> GetByStatusAsync(taskStatus status);
-    Task<Result<TaskResponseDto>> GetByIdAsync(int id);
-    Task<Result<TaskResponseDto>> CreateAsync(CreateTaskDto dto);
-    Task<Result<TaskResponseDto>> UpdateAsync(int id, UpdateTaskDto dto);
-    Task<Result<TaskResponseDto>> UpdateStatusAsync(int id, UpdateTaskStatusDto dto);
-    Task<Result> DeleteAsync(int id);
+    Task<Result<IEnumerable<TaskResponseDto>>> GetAllAsync(string userId);
+    Task<Result<IEnumerable<TaskResponseDto>>> GetAllByProjectIdAsync(int projectId, string userId);
+    Task<Result<IEnumerable<TaskResponseDto>>> GetByStatusAsync(taskStatus status, string userId);
+    Task<Result<TaskResponseDto>> GetByIdAsync(int id, string userId);
+    Task<Result<TaskResponseDto>> CreateAsync(CreateTaskDto dto, string userId);
+    Task<Result<TaskResponseDto>> UpdateAsync(int id, UpdateTaskDto dto, string userId);
+    Task<Result<TaskResponseDto>> UpdateStatusAsync(int id, UpdateTaskStatusDto dto, string userId);
+    Task<Result> DeleteAsync(int id, string userId);
 }

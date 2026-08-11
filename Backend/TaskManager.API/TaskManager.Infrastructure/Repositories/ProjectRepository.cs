@@ -14,18 +14,19 @@ public class ProjectRepository : IProjectRepository
         _context = context;
     }
 
-    public async Task<IEnumerable<Project>> GetAllAsync()
+    public async Task<IEnumerable<Project>> GetAllAsync(string userId)
     {
         return await _context.Projects
+            .Where(p => p.UserId == userId)
             .AsNoTracking()
             .ToListAsync();
     }
 
-    public async Task<Project?> GetByIdAsync(int id)
+    public async Task<Project?> GetByIdAsync(int id, string userId)
     {
         return await _context.Projects
             .AsNoTracking()
-            .FirstOrDefaultAsync(p => p.Id == id);
+            .FirstOrDefaultAsync(p => p.Id == id && p.UserId == userId);
     }
 
     public async Task<Project> CreateAsync(Project project)
@@ -35,9 +36,10 @@ public class ProjectRepository : IProjectRepository
         return project;
     }
 
-    public async Task<Project?> UpdateAsync(int id, Project project)
+    public async Task<Project?> UpdateAsync(int id, Project project, string userId)
     {
-        var existingProject = await _context.Projects.FindAsync(id);
+        var existingProject = await _context.Projects
+            .FirstOrDefaultAsync(p => p.Id == id && p.UserId == userId);
 
         if (existingProject is null)
             return null;
@@ -49,9 +51,10 @@ public class ProjectRepository : IProjectRepository
         return existingProject;
     }
 
-    public async Task<bool> DeleteAsync(int id)
+    public async Task<bool> DeleteAsync(int id, string userId)
     {
-        var project = await _context.Projects.FindAsync(id);
+        var project = await _context.Projects
+            .FirstOrDefaultAsync(p => p.Id == id && p.UserId == userId);
 
         if (project is null)
             return false;
