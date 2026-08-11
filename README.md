@@ -9,10 +9,9 @@
   <img src="https://img.shields.io/badge/Angular-21-red" alt="Angular 21">
   <img src="https://img.shields.io/badge/SQL%20Server-Database-blue" alt="SQL Server">
   <img src="https://img.shields.io/badge/EF%20Core-Code%20First-green" alt="EF Core">
-  <img src="https://img.shields.io/badge/Assessment-ElectroPi-lightgrey" alt="ElectroPi Assessment">
 </p>
 
-TaskFlow is a full-stack task management application built as a technical assessment for **ElectroPi** using **ASP.NET Core 10**, **Angular 21**, and **SQL Server**. It provides a robust, secure, and beautiful interface for managing projects, tasks, and users.
+TaskFlow is a comprehensive full-stack task management application built as a personal portfolio project using **ASP.NET Core 10**, **Angular 21**, and **SQL Server**. It provides a robust, secure, and beautiful interface for managing projects, tasks, and users.
 
 ## 🎥 Demo
 
@@ -184,4 +183,6 @@ docker run -p 5045:8080 taskmanager-api
 - Angular standalone components for a simpler frontend structure.
 - Global exception middleware for centralized error handling.
 
+## License
 
+This project is licensed under the MIT License.
